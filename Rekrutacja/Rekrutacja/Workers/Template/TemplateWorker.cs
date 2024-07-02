@@ -76,8 +76,8 @@ namespace Rekrutacja.Workers.Template
                         //Pobieramy obiekt z Nowo utworzonej sesji
                         var pracownikZSesja = nowaSesja.Get(pracownik);
                         //Features - są to pola rozszerzające obiekty w bazie danych, dzięki czemu nie jestesmy ogarniczeni to kolumn jakie zostały utworzone przez producenta
-                        pracownikZSesja.Features["DataObliczen"] = this.Parametry.DataObliczen;
-                        pracownikZSesja.Features["Wynik"] = CalculatorService.Calculate(this.Parametry.ZmiennaX, this.Parametry.ZmiennaY, this.Parametry.Operacja);
+                        pracownikZSesja.Features["DataObliczen"] = this.Parametry.CalculationDate;
+                        pracownikZSesja.Features["Wynik"] = CalculatorService.Calculate(this.Parametry.VariableX, this.Parametry.VariableY, this.Parametry.Operation);
                     }
                     //Zatwierdzamy zmiany wykonane w sesji
                     trans.CommitUI();
