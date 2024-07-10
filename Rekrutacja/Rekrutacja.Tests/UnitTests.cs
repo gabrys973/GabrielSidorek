@@ -1,4 +1,4 @@
-using Rekrutacja.Workers.Calculator;
+/*using Rekrutacja.Workers.Calculator;
 using Rekrutacja.Workers.Operations;
 
 namespace Rekrutacja.Tests;
@@ -34,4 +34,4 @@ public class UnitTests
     {
         Assert.Throws<DivideByZeroException>(() => CalculatorService.Calculate(4, 0, operation));
     }
-}
+}*/

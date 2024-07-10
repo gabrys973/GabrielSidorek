@@ -1,5 +1,5 @@
 ﻿using Rekrutacja.Workers.Calculator;
-using Rekrutacja.Workers.Operations;
+using Rekrutacja.Workers.Shapes;
 using Rekrutacja.Workers.Template;
 using Soneta.Business;
 using Soneta.Kadry;
@@ -8,6 +8,7 @@ using Soneta.Types;
 
 //Rejetracja Workera - Pierwszy TypeOf określa jakiego typu ma być wyświetlany Worker, Drugi parametr wskazuje na jakim Typie obiektów będzie wyświetlany Worker
 [assembly: Worker(typeof(TemplateWorker), typeof(Pracownicy))]
+
 namespace Rekrutacja.Workers.Template
 {
     public class TemplateWorker
@@ -24,24 +25,27 @@ namespace Rekrutacja.Workers.Template
             [Caption("Data obliczeń"), Priority(3)]
             public Date CalculationDate { get; set; }
 
-            [Caption("Operacja"), Priority(4)]
-            public Operation Operation { get; set; }
+            [Caption("Figura"), Priority(4)]
+            public Shape Shape { get; set; }
 
             public TemplateWorkerParametry(Context context) : base(context)
             {
                 VariableX = 0;
                 VariableY = 0;
                 CalculationDate = Date.Today;
-                Operation = Operation.Addition;
+                Shape = Shape.Rectangle;
             }
         }
+
         //Obiekt Context jest to pudełko które przechowuje Typy danych, aktualnie załadowane w aplikacji
         //Atrybut Context pobiera z "Contextu" obiekty które aktualnie widzimy na ekranie
         [Context]
         public Context Cx { get; set; }
+
         //Pobieramy z Contextu parametry, jeżeli nie ma w Context Parametrów mechanizm sam utworzy nowy obiekt oraz wyświetli jego formatkę
         [Context]
         public TemplateWorkerParametry Parametry { get; set; }
+
         //Atrybut Action - Wywołuje nam metodę która znajduje się poniżej
         [Action("Kalkulator",
            Description = "Prosty kalkulator ",
@@ -77,11 +81,10 @@ namespace Rekrutacja.Workers.Template
                         var pracownikZSesja = nowaSesja.Get(pracownik);
                         //Features - są to pola rozszerzające obiekty w bazie danych, dzięki czemu nie jestesmy ogarniczeni to kolumn jakie zostały utworzone przez producenta
                         pracownikZSesja.Features["DataObliczen"] = this.Parametry.CalculationDate;
-                        pracownikZSesja.Features["Wynik"] = CalculatorService.Calculate(this.Parametry.VariableX, this.Parametry.VariableY, this.Parametry.Operation);
+                        pracownikZSesja.Features["Wynik"] = CalculatorService.Calculate(this.Parametry.VariableX, this.Parametry.VariableY, this.Parametry.Shape);
                     }
                     //Zatwierdzamy zmiany wykonane w sesji
                     trans.CommitUI();
-
                 }
                 //Zapisujemy zmiany
                 nowaSesja.Save();
