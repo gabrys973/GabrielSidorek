@@ -1,4 +1,5 @@
 ﻿using Rekrutacja.Workers.Calculator;
+using Rekrutacja.Workers.Parsers;
 using Rekrutacja.Workers.Shapes;
 using Rekrutacja.Workers.Template;
 using Soneta.Business;
@@ -17,10 +18,10 @@ namespace Rekrutacja.Workers.Template
         public class TemplateWorkerParametry : ContextBase
         {
             [Caption("A"), Priority(1)]
-            public double VariableX { get; set; }
+            public string VariableX { get; set; }
 
             [Caption("B"), Priority(2)]
-            public double VariableY { get; set; }
+            public string VariableY { get; set; }
 
             [Caption("Data obliczeń"), Priority(3)]
             public Date CalculationDate { get; set; }
@@ -30,8 +31,8 @@ namespace Rekrutacja.Workers.Template
 
             public TemplateWorkerParametry(Context context) : base(context)
             {
-                VariableX = 0;
-                VariableY = 0;
+                VariableX = "";
+                VariableY = "";
                 CalculationDate = Date.Today;
                 Shape = Shape.Rectangle;
             }
@@ -81,7 +82,7 @@ namespace Rekrutacja.Workers.Template
                         var pracownikZSesja = nowaSesja.Get(pracownik);
                         //Features - są to pola rozszerzające obiekty w bazie danych, dzięki czemu nie jestesmy ogarniczeni to kolumn jakie zostały utworzone przez producenta
                         pracownikZSesja.Features["DataObliczen"] = this.Parametry.CalculationDate;
-                        pracownikZSesja.Features["Wynik"] = CalculatorService.Calculate(this.Parametry.VariableX, this.Parametry.VariableY, this.Parametry.Shape);
+                        pracownikZSesja.Features["Wynik"] = CalculatorService.Calculate(this.Parametry.VariableX.ParseFromString(), this.Parametry.VariableY.ParseFromString(), this.Parametry.Shape);
                     }
                     //Zatwierdzamy zmiany wykonane w sesji
                     trans.CommitUI();
